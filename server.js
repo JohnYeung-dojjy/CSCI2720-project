@@ -26,7 +26,7 @@ app.post('', function(req, res) {
 
             e.save(function (err) {
                 if (err) console.log(err);
-                res.status(201).send("Event Cretaed!");
+                res.status(201).json(e);
             });
     });
 
@@ -48,16 +48,40 @@ app.post('', function(req, res) {
     })
 });
 
-app.get('', function(req, res) { // Retrieving events
-
-    
+app.get('/event', function (req, res) { // Retrieve all events
+    Event.find({}, function (err, events) {
+        res.json(allEvents);
+    });
 });
 
-app.put('', function(req, res) { // updating events
+app.route('/event/:eventid')
+.get(function (req, res) { // Retrieving single event
+    Event.findOne({ event_id: { $eq: req.params['eventid'] }}, null)
+    .exec(function (err, e) {
+        if (err) res.send(err);
+        else res.json(e);
+    });
+})
+.put(function (req, res) { // updating events
+    var condition = { event_id : { $eq: req.params['eventid'] }},
+        update = { $set: { event_desc: req.body[''] },
+        $set: { event_summary: req.body[''] },
+        $set: { event_location: req.body[''] },
+        $set: { event_org: req.body[''] },
+        $set: { event_date: req.body[''] }};
 
-});
+    Event.update(condition, update, function(err) {
+        if (err) console.log(err);
+        else res.send('Event is successfully updated');
+    });
 
-app.delete('', function(req, res) { // Deleting events
-
+})
+.delete(function (req, res) { // Deleting events
+    Event.findOne({ event_id: { $eq: req.params['eventid'] }}, null)
+    .remove()
+    .exec(function (err) {
+        if (err) res.send(err);
+        else res.send('Event ' + req.params['eventid'] + 'has been removed.');
+    });
 });
 
