@@ -12,26 +12,30 @@ import {Event, User, Favourite_event, Comment} from "./schema.js";
 https.get(url.format("https://ogcef.one.gov.hk/event-api/eventList"), res => {
 
     // Store the gov data into our db
-    
+
     var body = [];
     res.on('data', (chunk) => {
             body.push(chunk);
     }).on('end', () => {
-            body = Buffer.concat(body).toString();
-            const json = JSON.parse(body);
+        body = Buffer.concat(body).toString();
+        const json = JSON.parse(body);
 
-            for (i = 0; i < json.length; i++) {                                                                     
-                    Event.create({                                   
-                        event_id: json[i].event_id,
-                        event_desc: json[i].event_desc,                                                                                         
-                        event_summary: json[i].event_summary,                                                                                   
-                        event_location: json[i].event_location,                                                                                 
-                        event_org: json[i].event_org,                                                                                           
-                        event_date: json[i].event_date                                                                                  
-                    }, (err) => {                                                                                                             
-                        if (err) console.log(err);
-                    });
-            }
+        Event.remove({}, (err) => {
+            if (err) console.log(err);
+        });
+        
+        for (i = 0; i < json.length; i++) {                                                                     
+            Event.create({                                   
+                event_id: json[i].event_id,
+                event_desc: json[i].event_desc,                                                                                         
+                event_summary: json[i].event_summary,                                                                                   
+                event_location: json[i].event_location,                                                                                 
+                event_org: json[i].event_org,                                                                                           
+                event_date: json[i].event_date                                                                                  
+            }, (err) => {                                                                                                             
+                if (err) console.log(err);
+            });
+        }
     });
 });
 
@@ -42,20 +46,20 @@ app.post('', function(req, res) {
     Event.findOne({ event_id: { $gt: 0 }}, null)
     .sort({ event_id: -1 })
     .exec(function (err, count) {
-            if (err) console.log(err);
-            var e = new Event({
-                event_id: count + 1,
-                event_desc: req.body[''], // marked for changes
-                event_summary: req.body[''], //
-                event_location: req.body[''], //
-                event_org: [''], //
-                event_date: [''] //
-            });
+        if (err) console.log(err);
+        var e = new Event({
+            event_id: count + 1,
+            event_desc: req.body[''], // marked for changes
+            event_summary: req.body[''], //
+            event_location: req.body[''], //
+            event_org: [''], //
+            event_date: [''] //
+        });
 
-            e.save(function (err) {
-                if (err) console.log(err);
-                res.status(201).json(e);
-            });
+        e.save(function (err) {
+            if (err) console.log(err);
+            res.status(201).json(e);
+        });
     });
 
    
