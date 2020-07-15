@@ -11,12 +11,12 @@ import {Event, User, Favourite_event, Comment} from "./schema.js";
 export function login(username, password)
 {
     // login
-    User.findOne({username: req.body.username}, function (err, user){
+    User.findOne({username: username}, function (err, user){
         if(err) console.log(err);
         if(!user) alert("user not found");
         else{
             //hash the input password and check it with the stored hashed password 
-            if(bcrypt.compareSync(bcrypt.hashSync(req.body.password), user.password)===false)
+            if(bcrypt.compareSync(bcrypt.hashSync(password), user.password)===false)
                 // password not correct
                 alert("incorrect password");
             else{
@@ -39,14 +39,28 @@ export function Flush_data()
 }
 
 //Favourite events
-export function add_favourite(username, event)
+export function add_favourite(user_id, event_id)
 {
-
+    var e = new Favourite_event({
+        user_id: user_id,
+        event_id: event_id
+    });
+    e.save((err)=>{
+        if(err) console.log(err);
+        res.status(201).json(e);
+    });
 } 
 
-export function remove_favourite(username, event)
+export function remove_favourite(user_id, event_id)
 {
-
+    Favourite_event.findOneAndRemove({user_id: user_id, event_id: event_id}, (err, e)=>{
+        if(err) console.log(err);
+        if(!e) 
+        {
+            console.log("favourite event not exist");
+            return;
+        }
+    });
 }
 
 //Event
