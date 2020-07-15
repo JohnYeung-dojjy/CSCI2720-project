@@ -10,7 +10,7 @@ import {Event, User, Favourite_event, Comment} from "./schema.js";
 app.post('', function(req, res) { 
     
     // Creating new events
-    
+
     Event.findOne({ event_id: { $gt: 0 }}, null)
     .sort({ event_id: -1 })
     .exec(function (err, count) {
@@ -30,22 +30,7 @@ app.post('', function(req, res) {
             });
     });
 
-    // login
-    User.findOne({username: req.body.username}, function (err, user){
-        if(err) console.log(err);
-        if(!user) console.log("user not found");
-        else{
-            //hash the input password and check it with the stored hashed password 
-            if(bcrypt.compareSync(bcrypt.hashSync(req.body.password), user.password)===false)
-                // password not correct
-                console.log("incorrect password");
-            else{
-                //correct password
-                //logined
-                res.cookie();
-            }
-        }
-    })
+   
 });
 
 app.get('/event', function (req, res) { // Retrieve all events
@@ -84,4 +69,8 @@ app.route('/event/:eventid')
         else res.send('Event ' + req.params['eventid'] + 'has been removed.');
     });
 });
+
+
+
+var server = app.listen(2020);
 
