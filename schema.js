@@ -24,7 +24,7 @@ var UserSchema = new Schema({
 
 var Favourite_eventSchema = new Schema({
     user_id: {type: Number, unique: true},
-    event_id: {type: String, unique: true}
+    event_id: {type: Number, unique: true}
 });
 
 var CommentSchema = new Schema({
