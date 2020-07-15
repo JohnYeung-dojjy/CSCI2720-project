@@ -24,7 +24,7 @@ app.post('', function(req, res) { // Creating new events
 
             e.save(function (err) {
                 if (err) console.log(err);
-                res.status(201).send("Event Cretaed!");
+                res.status(201).json(e);
             });
     });
     // login
@@ -47,15 +47,7 @@ app.post('', function(req, res) { // Creating new events
 
 app.get('/event', function (req, res) { // Retrieve all events
     Event.find({}, function (err, events) {
-        var allEvents = '';
-        events.forEach (function (e) {
-            allEvent += ('Summary: ' + e.event_summary + '<br>\n' +  // without css
-            'Location: ' + e.event_location + '<br>\n' + 
-            'Organizer: ' + e.event_org + '<br>\n' +
-            'Date: ' + e.event_date + '<br>\n' +
-            'Description: ' + e.event_desc + '<br>\n');
-        })
-        res.send(allEvents);
+        res.json(allEvents);
     });
 });
 
@@ -64,11 +56,7 @@ app.route('/event/:eventid')
     Event.findOne({ event_id: { $eq: req.params['eventid'] }}, null)
     .exec(function (err, e) {
         if (err) res.send(err);
-        else res.send('Summary: ' + e.event_summary + '<br>\n' +  // without css
-        'Location: ' + e.event_location + '<br>\n' + 
-        'Organizer: ' + e.event_org + '<br>\n' +
-        'Date: ' + e.event_date + '<br>\n' +
-        'Description: ' + e.event_desc + '<br>\n');
+        else res.json(e);
     });
 })
 .put(function (req, res) { // updating events
