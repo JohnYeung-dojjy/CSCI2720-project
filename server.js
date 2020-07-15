@@ -7,8 +7,10 @@ var bcrypt = require("bcryptjs");
 app.use(bodyParser.urlencoded({extended: false}));
 import {Event, User, Favourite_event, Comment} from "./schema.js";
 
-app.post('', function(req, res) { // Creating new events
-
+app.post('', function(req, res) { 
+    
+    // Creating new events
+    
     Event.findOne({ event_id: { $gt: 0 }}, null)
     .sort({ event_id: -1 })
     .exec(function (err, count) {
@@ -27,6 +29,7 @@ app.post('', function(req, res) { // Creating new events
                 res.status(201).send("Event Cretaed!");
             });
     });
+
     // login
     User.findOne({username: req.body.username}, function (err, user){
         if(err) console.log(err);
