@@ -183,10 +183,10 @@ export function add_New_Comment(user_id, event_id, new_comment)
             comment_content: new_comment
         });
 
-        e.save(err){
+        e.save((err)=>{
             if(err) console.log(err);
             res.status(201).json(e);
-        }
+        });
     });
 
 }
