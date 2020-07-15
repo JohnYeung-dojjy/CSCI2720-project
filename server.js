@@ -3,6 +3,7 @@ var mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const express = require("express");
 const app = express();
+var bcrypt = require("bcryptjs");
 app.use(bodyParser.urlencoded({extended: false}));
 import {Event, User, Favourite_event, Comment} from "./schema.js";
 
@@ -26,6 +27,22 @@ app.post('', function(req, res) { // Creating new events
                 res.status(201).send("Event Cretaed!");
             });
     });
+    // login
+    User.findOne({username: req.body.username}, function (err, user){
+        if(err) console.log(err);
+        if(!user) console.log("user not found");
+        else{
+            //hash the input password and check it with the stored hashed password 
+            if(bcrypt.compareSync(bcrypt.hashSync(req.body.password), user.password)===false)
+                // password not correct
+                console.log("incorrect password");
+            else{
+                //correct password
+                //logined
+                res.cookie();
+            }
+        }
+    })
 });
 
 app.get('', function(req, res) { // Retrieving events
