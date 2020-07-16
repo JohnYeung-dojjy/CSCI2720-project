@@ -19,12 +19,12 @@ app.post('', function(req, res) {
     .exec(function (err, count) {
         if (err) console.log(err);
         var e = new Event({
-            event_id: count + 1,
-            event_desc: req.body[''], // marked for changes
-            event_summary: req.body[''], //
-            event_location: req.body[''], //
-            event_org: [''], //
-            event_date: [''] //
+            event_id: count.event_id + 1,
+            event_desc: req.body['desc'], // marked for changes
+            event_summary: req.body['summary'], //
+            event_location: req.body['location'], //
+            event_org: req.body['org'], //
+            event_date: req.body['date'] //
         });
 
         e.save(function (err) {
@@ -38,7 +38,7 @@ app.post('', function(req, res) {
 
 app.get('/event', function (req, res) { // Retrieve all events
     Event.find({}, function (err, events) {
-        res.json(allEvents);
+        res.json(events);
     });
 });
 
@@ -52,11 +52,11 @@ app.route('/event/:eventid')
 })
 .put(function (req, res) { // updating events
     var condition = { event_id : { $eq: req.params['eventid'] }},
-        update = { $set: { event_desc: req.body[''] },
-        $set: { event_summary: req.body[''] },
-        $set: { event_location: req.body[''] },
-        $set: { event_org: req.body[''] },
-        $set: { event_date: req.body[''] }};
+        update = { $set: { event_desc: req.body['desc'] },
+        $set: { event_summary: req.body['summary'] },
+        $set: { event_location: req.body['location'] },
+        $set: { event_org: req.body['org'] },
+        $set: { event_date: req.body['date'] }};
 
     Event.update(condition, update, function(err) {
         if (err) console.log(err);
@@ -69,7 +69,7 @@ app.route('/event/:eventid')
     .remove()
     .exec(function (err) {
         if (err) res.send(err);
-        else res.send('Event ' + req.params['eventid'] + 'has been removed.');
+        else res.send('Event ' + req.params['eventid'] + ' has been removed.');
     });
 });
 
