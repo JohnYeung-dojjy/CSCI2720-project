@@ -127,7 +127,6 @@ app.route('/event/:eventid')
         if (err) console.log(err);
         else res.send('Event is successfully updated');
     });
-
 })
 .delete(function (req, res) { // Deleting events
     Event.findOne({ event_id: { $eq: req.params['eventid'] }}, null)
@@ -152,7 +151,6 @@ app.route('/:userid/:eventid/comment')
             user_id: req.params['userid'],
             comment_content: req.body['comment']
         });
-
         e.save((err)=>{
             if(err) console.log(err);
             res.status(201).json(e);
@@ -176,14 +174,15 @@ app.route('/:userid/favourite')
             });
         }
         else res.send("Favaorite is added!");
-    })
-    
+    });
 })
 .get(function (req, res) {
     Favourite_event.find({ user_id: { $eq: req.params['userid'] }}, null)
     .exec(function (err, e) {
         if (err) res.send(err);
-        else res.send(e);
+        else {
+            res.send(e);
+        }
     });
 })
 .delete(function (req, res) {
@@ -195,4 +194,3 @@ app.route('/:userid/favourite')
     });
 });
 var server = app.listen(2020);
-
