@@ -1,9 +1,10 @@
+const express = require("express");
 var mongoose = require("mongoose");
 const https = require('https');
 const url = require('url');
 //mongoose.connect('');
 const bodyParser = require("body-parser");
-const express = require("express");
+
 const app = express();
 var bcrypt = require("bcryptjs");
 app.use(bodyParser.urlencoded({extended: false}));
@@ -39,10 +40,10 @@ var CommentSchema = new Schema({
     comment_content: {type:String}
 });
 
-const Event = mongoose.Model("Event", EventSchema);
-const User = mongoose.Model("User", UserSchema);
-const Favourite_event =mongoose.Model("Favourite event", Favourite_eventSchema);
-const Comment = mongoose.Model("Comment", CommentSchema);
+const Event = mongoose.model("Event", EventSchema);
+const User = mongoose.model("User", UserSchema);
+const Favourite_event =mongoose.model("Favourite event", Favourite_eventSchema);
+const Comment = mongoose.model("Comment", CommentSchema);
 
 app.METHOD('', function(req, res) {
 

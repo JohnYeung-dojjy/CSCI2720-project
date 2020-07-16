@@ -7,13 +7,17 @@ const express = require("express");
 const app = express();
 var bcrypt = require("bcryptjs");
 app.use(bodyParser.urlencoded({extended: false}));
+
+
 var schema = require("./schema.js");
 var User = schema.User;
 var Favourite_event = schema.Favourite_event;
 var Comment = schema.Comment;
 var Event = schema.Event;
+
+
 //user
-exports.login(username, password)
+exports.login = function(username, password)
 {
     // login
     User.findOne({username: username}, function (err, user){
@@ -33,12 +37,12 @@ exports.login(username, password)
     });
 }
 
-exports.logout()
+exports.logout = function()
 {
 
 }
 
-exports.Flush_data()
+exports.Flush_data = function()
 {
     https.get(url.format("https://ogcef.one.gov.hk/event-api/eventList"), res => {
         var body = [];
@@ -69,7 +73,7 @@ exports.Flush_data()
 }
 
 //Favourite events
-exports.add_favourite(user_id, event_id)
+exports.add_favourite = function(user_id, event_id)
 {
     var e = new Favourite_event({
         user_id: user_id,
@@ -82,7 +86,7 @@ exports.add_favourite(user_id, event_id)
     console.log("favourite event added");
 } 
 
-exports.remove_favourite(user_id, event_id)
+exports.remove_favourite = function(user_id, event_id)
 {
     Favourite_event.findOneAndRemove({user_id: user_id, event_id: event_id}, (err, e)=>{
         if(err) console.log(err);
@@ -96,7 +100,7 @@ exports.remove_favourite(user_id, event_id)
 }
 
 //Event
-exports.get_all_Events()
+exports.get_all_Events = function()
 {
     Event.find().exec((err, e)=>{
         if(err) console.log(err);
@@ -105,7 +109,7 @@ exports.get_all_Events()
     });
 }
 
-exports.get_event(id)
+exports.get_event = function(id)
 {
     Event.findOne({eventid: id}).exec((err, e)=>{
         if(err) console.log(err);
@@ -118,7 +122,7 @@ exports.get_event(id)
     });
 }
 
-exports.add_new_event(desc, summary, location, organizer, date)
+exports.add_new_event = function(desc, summary, location, organizer, date)
 {
     //find max id
     Event.find().sort({event_id: -1}).limit(1).exec((err, max_event)=>{
@@ -139,7 +143,7 @@ exports.add_new_event(desc, summary, location, organizer, date)
     });
 }
 
-exports.edit_event(id, edit_dist, content)
+exports.edit_event = function(id, edit_dist, content)
 {
     //edit_dist is a string represending the name of element that you would like to change
     //content is the desired updated content of that element
@@ -205,7 +209,7 @@ exports.edit_event(id, edit_dist, content)
     }
 }
 
-exports.delete_event(id)
+exports.delete_event = function(id)
 {
     Event.findOneAndRemove({event_id: id}).exec((err, e)=>{
         if(err) console.log(err);
@@ -218,7 +222,7 @@ exports.delete_event(id)
 }
 
 //Comment
-exports.add_New_Comment(user_id, event_id, new_comment)
+exports.add_New_Comment = function(user_id, event_id, new_comment)
 {
     //find max Comment id
     Comment.find().sort({event_id: -1}).limit(1).exec((err, max_comment)=>{
@@ -238,7 +242,7 @@ exports.add_New_Comment(user_id, event_id, new_comment)
 
 }
 
-exports.edit_Comment(comment_id, content)
+exports.edit_Comment = function(comment_id, content)
 {
     Comment.findOneAndUpdate({comment_id: comment_id}, {comment_content: content}, (err, e)=>{
         if(err) console.log(err);
