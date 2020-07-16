@@ -35,8 +35,8 @@ var CommentSchema = new Schema({
 });
 
 
-export const Event = mongoose.Model("Event", EventSchema);
-export const User = mongoose.Model("User", UserSchema);
-export const Favourite_event =mongoose.Model("Favourite event", Favourite_eventSchema);
-export const Comment = mongoose.Model("Comment", CommentSchema);
+exports.Event = mongoose.Model("Event", EventSchema);
+exports.User = mongoose.Model("User", UserSchema);
+exports.Favourite_event =mongoose.Model("Favourite event", Favourite_eventSchema);
+exports.Comment = mongoose.Model("Comment", CommentSchema);
 

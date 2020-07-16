@@ -7,8 +7,11 @@ const express = require("express");
 const app = express();
 var bcrypt = require("bcryptjs");
 app.use(bodyParser.urlencoded({extended: false}));
-import {Event, User, Favourite_event, Comment} from "./schema.js";
-
+var schema = require("./schema.js");
+var User = schema.User;
+var Favourite_event = schema.Favourite_event;
+var Comment = schema.Comment;
+var Event = schema.Event;
 //user
 export function login(username, password)
 {
@@ -237,7 +240,7 @@ export function add_New_Comment(user_id, event_id, new_comment)
 
 export function edit_Comment(comment_id, content)
 {
-    comment_id.findOneAndUpdate({comment_id: comment_id}, {comment_content: content}, (err, e)=>{
+    Comment.findOneAndUpdate({comment_id: comment_id}, {comment_content: content}, (err, e)=>{
         if(err) console.log(err);
         if(!e)
         {
