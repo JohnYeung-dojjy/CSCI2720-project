@@ -137,12 +137,16 @@ app.route('/event/:eventid')
     });
 });
 
-app.route('/:userid/:eventid/comment/:commentid')
+app.route('/:userid/:eventid/comment')
 .post(function (req, res) {
-    Comment.find().sort({event_id: -1}).limit(1).exec((err, max_comment)=>{
+    Comment.findOne({ event_id: { $gt: 0 }}, null)
+    .sort({ event_id: -1 })
+    .exec(function (err, count) {
         if(err) console.log(err);
+        if (count == null) max_comment = 0;
+        else max_comment = count.comment_id;
         var e = new Comment({
-            comment_id: max_comment[0].comment_id + 1,
+            comment_id: max_comment + 1,
             event_id: req.params['eventid'],
             user_id: req.params['userid'],
             comment_content: req.body['comment']
@@ -157,24 +161,32 @@ app.route('/:userid/:eventid/comment/:commentid')
 
 app.route('/:userid/favourite')
 .post(function (req, res) {
-    var e = new Favourite_event({
-        user_id: req.params['userid'],
-        event_id: event_id
-    });
-    e.save((err)=>{
-        if(err) console.log(err);
-        res.status(201).json(e);
-    });
+    Favourite_event.findOne({ user_id: { $eq: req.params['userid'] }, event_id: { $eq: req.query['eventid'] }}, null)
+    .exec(function (err, fe) {
+        if (err) console.log(err);
+        if (fe == null) {
+            var e = new Favourite_event({
+            user_id: req.params['userid'],
+            event_id: req.query['eventid']
+            });
+            e.save((err)=>{
+                if(err) console.log(err);
+                res.status(201).json(e);
+            });
+        }
+        else res.send("Favaorite is added!");
+    })
+    
 })
 .get(function (req, res) {
-    Favourite_event.findOne({ user_id: { $eq: req.params['userid'] }}, null)
+    Favourite_event.find({ user_id: { $eq: req.params['userid'] }}, null)
     .exec(function (err, e) {
         if (err) res.send(err);
         else res.send(e);
     });
 })
 .delete(function (req, res) {
-    Favourite_event.findOne({ user_id: { $eq: req.params['userid'] }}, null)
+    Favourite_event.findOne({ user_id: { $eq: req.params['userid'] }, event_id: { $eq: req.query['eventid'] }}, null)
     .remove()
     .exec(function (err, e) {
         if (err) res.send(err);
