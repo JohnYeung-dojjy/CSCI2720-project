@@ -1,5 +1,7 @@
 var mongoose = require("mongoose");
 //mongoose.connect('');
+const https = require('https');
+const url = require('url');
 const bodyParser = require("body-parser");
 const express = require("express");
 const app = express();
@@ -35,7 +37,32 @@ export function logout()
 
 export function Flush_data()
 {
+    https.get(url.format("https://ogcef.one.gov.hk/event-api/eventList"), res => {
+        var body = [];
+        res.on('data', (chunk) => {
+            body.push(chunk);
+        }).on('end', () => {
+            body = Buffer.concat(body).toString();
+            const json = JSON.parse(body);
 
+            Event.remove({}, (err) => {
+                if (err) console.log(err);
+            });
+            
+            for (i = 0; i < json.length; i++) {                                                                     
+                Event.create({                                   
+                    event_id: json[i].event_id,
+                    event_desc: json[i].event_desc,                                                                                         
+                    event_summary: json[i].event_summary,                                                                                   
+                    event_location: json[i].event_location,                                                                                 
+                    event_org: json[i].event_org,                                                                                           
+                    event_date: json[i].event_date                                                                                  
+                }, (err) => {                                                                                                             
+                    if (err) console.log(err);
+                });
+            }
+        });
+    });
 }
 
 //Favourite events

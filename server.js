@@ -8,36 +8,7 @@ const app = express();
 var bcrypt = require("bcryptjs");
 app.use(bodyParser.urlencoded({extended: false}));
 import {Event, User, Favourite_event, Comment} from "./schema.js";
-
-https.get(url.format("https://ogcef.one.gov.hk/event-api/eventList"), res => {
-
-    // Store the gov data into our db
-
-    var body = [];
-    res.on('data', (chunk) => {
-            body.push(chunk);
-    }).on('end', () => {
-        body = Buffer.concat(body).toString();
-        const json = JSON.parse(body);
-
-        Event.remove({}, (err) => {
-            if (err) console.log(err);
-        });
-        
-        for (i = 0; i < json.length; i++) {                                                                     
-            Event.create({                                   
-                event_id: json[i].event_id,
-                event_desc: json[i].event_desc,                                                                                         
-                event_summary: json[i].event_summary,                                                                                   
-                event_location: json[i].event_location,                                                                                 
-                event_org: json[i].event_org,                                                                                           
-                event_date: json[i].event_date                                                                                  
-            }, (err) => {                                                                                                             
-                if (err) console.log(err);
-            });
-        }
-    });
-});
+import Flush_data from "./functions.js";
 
 app.post('', function(req, res) { 
     
