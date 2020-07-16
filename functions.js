@@ -68,7 +68,7 @@ export function get_all_Events()
 {
     Event.find().exec((err, e)=>{
         if(err) console.log(err);
-        return e.json();
+        return res.json(e);
     });
 }
 
@@ -81,7 +81,7 @@ export function get_event(id)
             console.log("event does not exist");
             return;
         }
-        return e.json();
+        return res.json(e);
     });
 }
 
