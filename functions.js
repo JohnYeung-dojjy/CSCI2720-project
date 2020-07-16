@@ -44,11 +44,11 @@ export function Flush_data()
         }).on('end', () => {
             body = Buffer.concat(body).toString();
             const json = JSON.parse(body);
-
+            //clear the database
             Event.remove({}, (err) => {
                 if (err) console.log(err);
             });
-            
+            //replace the database with the default gov database
             for (i = 0; i < json.length; i++) {                                                                     
                 Event.create({                                   
                     event_id: json[i].event_id,
@@ -76,6 +76,7 @@ export function add_favourite(user_id, event_id)
         if(err) console.log(err);
         res.status(201).json(e);
     });
+    console.log("favourite event added");
 } 
 
 export function remove_favourite(user_id, event_id)
@@ -87,6 +88,7 @@ export function remove_favourite(user_id, event_id)
             console.log("favourite event not exist");
             return;
         }
+        console.log("removed favourite successfully");
     });
 }
 
@@ -95,6 +97,7 @@ export function get_all_Events()
 {
     Event.find().exec((err, e)=>{
         if(err) console.log(err);
+        //e is an array of events
         return res.json(e);
     });
 }
@@ -119,11 +122,11 @@ export function add_new_event(desc, summary, location, organizer, date)
         if(err) console.log(err);
         var e = new Event({
             event_id: max_event[0].event_id + 1,
-            event_desc: desc, // marked for changes
-            event_summary: summary, //
-            event_location: location, //
-            event_org: organizer, //
-            event_date: date //
+            event_desc: desc,
+            event_summary: summary,
+            event_location: location,
+            event_org: organizer,
+            event_date: date
         });
 
         e.save(function (err) {
@@ -223,7 +226,7 @@ export function add_New_Comment(user_id, event_id, new_comment)
             user_id: user_id,
             comment_content: new_comment
         });
-
+    
         e.save((err)=>{
             if(err) console.log(err);
             res.status(201).json(e);
