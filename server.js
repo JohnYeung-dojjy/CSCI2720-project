@@ -52,11 +52,11 @@ app.route('/event/:eventid')
 })
 .put(function (req, res) { // updating events
     var condition = { event_id : { $eq: req.params['eventid'] }},
-        update = { $set: { event_desc: req.body['desc'] },
-        $set: { event_summary: req.body['summary'] },
-        $set: { event_location: req.body['location'] },
-        $set: { event_org: req.body['org'] },
-        $set: { event_date: req.body['date'] }};
+        update = { $set: { event_desc: req.body['desc'],
+        event_summary: req.body['summary'],
+        event_location: req.body['location'],
+        event_org: req.body['org'],
+        event_date: req.body['date'] }};
 
     Event.update(condition, update, function(err) {
         if (err) console.log(err);
