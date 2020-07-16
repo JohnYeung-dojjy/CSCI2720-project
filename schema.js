@@ -1,7 +1,9 @@
-var mongoose = require("mongoose");
-const bodyParser = require("body-parser");
 const express = require("express");
+
+const bodyParser = require("body-parser");
+
 const app = express();
+var mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 app.use(bodyParser.urlencoded({extended: false}));
 
@@ -35,8 +37,8 @@ var CommentSchema = new Schema({
 });
 
 
-export const Event = mongoose.Model("Event", EventSchema);
-export const User = mongoose.Model("User", UserSchema);
-export const Favourite_event =mongoose.Model("Favourite event", Favourite_eventSchema);
-export const Comment = mongoose.Model("Comment", CommentSchema);
+exports.Event = mongoose.model("Event", EventSchema);
+exports.User = mongoose.model("User", UserSchema);
+exports.Favourite_event =mongoose.model("Favourite event", Favourite_eventSchema);
+exports.Comment = mongoose.model("Comment", CommentSchema);
 

@@ -1,10 +1,29 @@
 {
-  "name": "CSCI2720 project",
+  "name": "csci2720-project",
   "version": "1.0.0",
-  "dependencies": {},
-  "devDependencies": {
+  "description": "",
+  "main": "functions.js",
+  "dependencies": {
+    "bcrypt": "^5.0.0",
+    "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
-    "mongoose": "^5.9.24"
-  }
+    "mongoose": "^5.9.24",
+    "node": "^14.5.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JohnYeung-dojjy/CSCI2720-project.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JohnYeung-dojjy/CSCI2720-project/issues"
+  },
+  "homepage": "https://github.com/JohnYeung-dojjy/CSCI2720-project#readme"
 }
